@@ -1,18 +1,18 @@
 /* =============================================================================
-   Database Overview & Structure Check
+   Database Exploration
    =============================================================================
-   Goal:
-     • Get a quick snapshot of all available tables in the database.
-     • Review the column-level details for selected tables to understand 
-       field types, sizes, and nullability.
+   Objective:
+     • Inspect the overall structure of the database.
+     • Review available tables and column-level metadata.
+     • Perform basic structural checks to support further analysis.
 
-   Referenced System Tables:
-     • INFORMATION_SCHEMA.TABLES   – For listing tables
-     • INFORMATION_SCHEMA.COLUMNS  – For inspecting column metadata
+   System Views Used:
+     • INFORMATION_SCHEMA.TABLES
+     • INFORMATION_SCHEMA.COLUMNS
    =============================================================================
 */
 
--- List every table present in the current database
+-- List all tables available in the current database
 SELECT 
     TABLE_CATALOG,
     TABLE_SCHEMA,
@@ -20,8 +20,9 @@ SELECT
     TABLE_TYPE
 FROM INFORMATION_SCHEMA.TABLES;
 
--- Column details for a chosen table: dim_customers
--- Helps verify structure before performing transformations or analysis
+
+
+-- Inspect column details for a specific table (dim_customers)
 SELECT 
     COLUMN_NAME,
     DATA_TYPE,
@@ -29,3 +30,23 @@ SELECT
     CHARACTER_MAXIMUM_LENGTH
 FROM INFORMATION_SCHEMA.COLUMNS
 WHERE TABLE_NAME = 'dim_customers';
+
+
+
+-- Explore list of all countries represented in the customer base
+SELECT DISTINCT 
+    country
+FROM gold.dim_customers;
+
+
+
+-- View product categorization (main category → sub category → product)
+SELECT DISTINCT 
+    category, 
+    sub_category, 
+    product_name
+FROM gold.dim_products
+ORDER BY 
+    category, 
+    sub_category, 
+    product_name;
